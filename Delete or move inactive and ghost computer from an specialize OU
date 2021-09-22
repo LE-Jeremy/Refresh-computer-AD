@@ -1,0 +1,17 @@
+$Day=60
+$Date =(Get-Date).Adddays(-($Day))
+$Inactives_Objects = Get-ADComputer -Filter {LastLogonDate -lt $Date -and enabled -eq $true} -Properties LastLogonDate | Where{ $_.DistinguishedName -match "OU=ORDINATEURS,OU=esgi" }
+$Inactives_Objects.count
+$Name=$Inactives_Objects.Name
+$Disable_Objects=Get-ADComputer -Filter {(Enabled -eq $False)} | Where{ $_.DistinguishedName -match "OU=ORDINATEURS,OU=esgi" }
+$Disable_Objects.count
+$Name2=$Disable_Objects.Name
+$List=$Name + $Name2
+$List
+$List | Remove-ADComputer -Confirm:$false
+
+#######Move the computer to an other OU#########
+
+#$Target=$Inactives_Objects.DistinguishedName
+#Disable-ADComputer -Identity $Name -Confirm:false
+#Move-ADObject -Identity $Target -TargetPath "OU=Inactifs,OU=esgiS"
