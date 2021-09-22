@@ -1,0 +1,8 @@
+$Day=5
+$Date =(Get-Date).Adddays(-($Day))
+$Inactives_Objects = Get-ADComputer -Filter {WhenCreated -lt $Date} -Properties WhenCreated | Where{ $_.DistinguishedName -match "CN=Computers" }
+$Inactives_Objects
+$Inactives_Objects.count 
+$Name=$Inactives_Objects.Name
+$Name
+$Name | Remove-ADComputer -Confirm:$false
